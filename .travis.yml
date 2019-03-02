@@ -10,13 +10,13 @@ matrix:
       script:
         - export PATH=$MSBUILD_PATH:$PATH
         - cd ..
-        - git clone https://github.com/bluewhalerobot/GalileoSDK
+        - pwd
+        - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
         - choco source add -n=ros-win -s="https://roswin.azurewebsites.net/api/v2"
         - choco install python2 -y
         - choco install boost -y
         - cd pygalileo
-        - travis_wait MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
-        - travis_wait MSBuild.exe pyGalileo.sln //p:configuration=debug //p:platform=x64
+        - MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
       before_deploy:
         - mkdir -p deploy/pygalileo/
         - cp x64/Release/pyGalileo.pyd deploy/pygalileo/pyGalileo.pyd
