@@ -14,12 +14,12 @@ matrix:
         - choco source add -n=ros-win -s="https://roswin.azurewebsites.net/api/v2"
         - choco install python2 -y
         - choco install boost -y
-        - cd pyGalileo
+        - cd pygalileo
         - travis_wait MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
         - travis_wait MSBuild.exe pyGalileo.sln //p:configuration=debug //p:platform=x64
       before_deploy:
-        - mkdir -p deploy/pyGalileo/
-        - cp x64/Release/pyGalileo.pyd deploy/pyGalileo/pyGalileo.pyd
+        - mkdir -p deploy/pygalileo/
+        - cp x64/Release/pyGalileo.pyd deploy/pygalileo/pyGalileo.pyd
         - cd deploy
         - tar -czf pyGalileo-win-${TRAVIS_TAG}.tar.gz pyGalileo
         - cd ..
