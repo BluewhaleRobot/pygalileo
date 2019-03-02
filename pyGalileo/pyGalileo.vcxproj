@@ -81,8 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\workspace\GalileoSDK\include;E:\workspace\GalileoSDK\GalileoSDK\include;C:\Python27amd64\include;C:\boost\include\boost-1_66;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python27amd64\libs;C:\boost\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\GalileoSDK\include;$(SolutionDir)..\GalileoSDK\GalileoSDK\include;C:\Python27\include;C:\opt\rosdeps\x64\include\boost-1_66;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Python27\libs;C:\opt\rosdeps\x64\lib;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
     <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
