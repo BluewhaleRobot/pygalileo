@@ -42,6 +42,7 @@ else()
    pkg_search_module(PYTHON REQUIRED python3)
    find_package(Boost REQUIRED COMPONENTS python3)
 endif()
+message(STATUS "Using Python ${PYTHON_VERSION}")
 
 find_package(GalileoSDK REQUIRED)
 
