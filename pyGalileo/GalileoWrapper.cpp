@@ -13,10 +13,10 @@ namespace GalileoWrap {
         free(sdk);
     }
 
-    py_callable GalileoWrap::ConnectCB = py_callable(boost::python::object());
-    py_callable GalileoWrap::DisconnectCB = py_callable(boost::python::object());
-    py_callable GalileoWrap::UpdateStatusCB = py_callable(boost::python::object());
-    py_callable GalileoWrap::GoalReachedCB = py_callable(boost::python::object());
+    py_callable ConnectCB = py_callable(boost::python::object());
+    py_callable DisconnectCB = py_callable(boost::python::object());
+    py_callable UpdateStatusCB = py_callable(boost::python::object());
+    py_callable GoalReachedCB = py_callable(boost::python::object());
 
     GalileoSDK::GALILEO_RETURN_CODE
         GalileoWrap::Connect(std::string targetID, bool auto_connect, int timeout,

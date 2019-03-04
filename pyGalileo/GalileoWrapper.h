@@ -28,15 +28,7 @@ namespace GalileoWrap {
         py_callable(const boost::python::object& object)
         {
             with_gil gil;
-            object_.reset(
-                // GIL locked, so it is safe to copy.
-                new boost::python::object{ object },
-                // Use a custom deleter to hold GIL when the object is deleted.
-                [](boost::python::object* object)
-            {
-                with_gil gil;
-                delete object;
-            });
+            object_ = *object;
         }
 
         // Use default copy-constructor and assignment-operator.
@@ -48,11 +40,11 @@ namespace GalileoWrap {
         {
             // Lock the GIL as the python object is going to be invoked.
             with_gil gil;
-            (*object_)(std::forward<Args>(args)...);
+            (object_)(std::forward<Args>(args)...);
         }
 
     private:
-        std::shared_ptr<boost::python::object> object_;
+        boost::python::object object_;
     };
 
     namespace py = boost::python;
@@ -108,10 +100,6 @@ namespace GalileoWrap {
         void SetGoalReachedCallback(boost::python::object callback);
         GalileoSDK::GALILEO_RETURN_CODE WaitForGoal(int goalID);
         ~GalileoWrap();
-        static py_callable ConnectCB;
-        static py_callable DisconnectCB;
-        static py_callable UpdateStatusCB;
-        static py_callable GoalReachedCB;
     private:
         GalileoSDK::GalileoSDK* sdk;
     };

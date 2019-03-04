@@ -25,6 +25,7 @@ public:
 BOOST_PYTHON_MODULE(pygalileo)
 {
     using namespace boost::python;
+    PyEval_InitThreads();
     class_<GalileoWrap::GalileoWrap>("SDK", init<>())
         .def("Connect", &GalileoWrap::GalileoWrap::Connect,
         (boost::python::arg("targetID"), boost::python::arg("auto_connect"), boost::python::arg("timeout"),
