@@ -182,14 +182,14 @@ namespace GalileoWrap {
 
     void GalileoWrap::SetCurrentStatusCallback(boost::python::object callback) {
         UpdateStatusCB = py_callable{callback};
-        return sdk->SetCurrentStatusCallback([](GalileoSDK::GALILEO_RETURN_CODE code, galileo_serial_server::GalileoStatus status)void{
+        return sdk->SetCurrentStatusCallback([](GalileoSDK::GALILEO_RETURN_CODE code, galileo_serial_server::GalileoStatus status){
             UpdateStatusCB(code, status);
         });
     }
 
     void GalileoWrap::SetGoalReachedCallback(boost::python::object callback) {
         GoalReachedCB = py_callable{callback};
-        return sdk->SetGoalReachedCallback([](int goalIndex, galileo_serial_server::GalileoStatus status)void{
+        return sdk->SetGoalReachedCallback([](int goalIndex, galileo_serial_server::GalileoStatus status){
             GoalReachedCB(goalIndex, status);
         });
     }
