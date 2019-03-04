@@ -32,9 +32,18 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 include(GNUInstallDirs)
 
+option( USE_PYTHON2 "If on, link to Python 2 instead of 3" ON )
+
+find_package(PkgConfig REQUIRED)
+if ( USE_PYTHON2 )
+   pkg_search_module(PYTHON REQUIRED python2)
+   find_package(Boost REQUIRED COMPONENTS python)
+else()
+   pkg_search_module(PYTHON REQUIRED python3)
+   find_package(Boost REQUIRED COMPONENTS python3)
+endif()
+
 find_package(GalileoSDK REQUIRED)
-find_package(Boost REQUIRED COMPONENTS "python3")
-find_package(PythonLibs 3.5)
 
 include_directories(
    ${PROJECT_SOURCE_DIR}
@@ -52,6 +61,7 @@ add_library(pygalileo
 
 set_target_properties(pygalileo PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(pygalileo PROPERTIES SOVERSION 0)
+set_target_properties(pygalileo PROPERTIES PREFIX "")
 
 target_link_libraries(pygalileo
     ${GalileoSDK_LIBRARIES}

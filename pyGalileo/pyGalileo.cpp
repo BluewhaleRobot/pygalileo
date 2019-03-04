@@ -22,7 +22,7 @@ public:
     std::string mMsg;
 };
 
-BOOST_PYTHON_MODULE(libpygalileo)
+BOOST_PYTHON_MODULE(pygalileo)
 {
     using namespace boost::python;
     class_<GalileoWrap::GalileoWrap>("SDK", init<>())
