@@ -52,7 +52,7 @@ matrix:
         # build and install GalileoSDK
         - cd ..
         - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
-        - cd GalileoSDK
+        - cd GalileoSDK/GalileoSDK
         - mkdir build
         - cd build
         - cmake ..
