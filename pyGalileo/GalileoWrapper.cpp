@@ -15,6 +15,8 @@ namespace GalileoWrap {
 
     py_callable GalileoWrap::ConnectCB = py_callable(boost::python::object());
     py_callable GalileoWrap::DisconnectCB = py_callable(boost::python::object());
+    py_callable GalileoWrap::UpdateStatusCB = py_callable(boost::python::object());
+    py_callable GalileoWrap::GoalReachedCB = py_callable(boost::python::object());
 
     GalileoSDK::GALILEO_RETURN_CODE
         GalileoWrap::Connect(std::string targetID, bool auto_connect, int timeout,
@@ -179,20 +181,17 @@ namespace GalileoWrap {
     }
 
     void GalileoWrap::SetCurrentStatusCallback(boost::python::object callback) {
-        /*ConnectCB = callback;
-        if (!PyCallable_Check(callback)) {
-            ConnectCB = NULL;
-        }
-        
-        
-
-        boost::python::call<void>(callback, 1,1,1);*/
-
-        return sdk->SetCurrentStatusCallback(boost::python::extract<void(*)(GalileoSDK::GALILEO_RETURN_CODE, galileo_serial_server::GalileoStatus)>(callback));
+        UpdateStatusCB = py_callable{callback};
+        return sdk->SetCurrentStatusCallback([](GalileoSDK::GALILEO_RETURN_CODE code, galileo_serial_server::GalileoStatus status)void{
+            UpdateStatusCB(code, status);
+        });
     }
 
     void GalileoWrap::SetGoalReachedCallback(boost::python::object callback) {
-        return sdk->SetGoalReachedCallback(boost::python::extract<void(*)(int, galileo_serial_server::GalileoStatus)>(callback));
+        GoalReachedCB = py_callable{callback};
+        return sdk->SetGoalReachedCallback([](int goalIndex, galileo_serial_server::GalileoStatus status)void{
+            GoalReachedCB(goalIndex, status);
+        });
     }
 
     GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::WaitForGoal(int goalID) {

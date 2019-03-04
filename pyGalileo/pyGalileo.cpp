@@ -1,6 +1,5 @@
-#pragma once
 #define BOOST_PYTHON_STATIC_LIB
-#include <GalileoSDK.h>
+#include <GalileoSDK/GalileoSDK.h>
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "GalileoWrapper.h"
@@ -23,7 +22,7 @@ public:
     std::string mMsg;
 };
 
-BOOST_PYTHON_MODULE(pyGalileo)
+BOOST_PYTHON_MODULE(libpygalileo)
 {
     using namespace boost::python;
     class_<GalileoWrap::GalileoWrap>("SDK", init<>())

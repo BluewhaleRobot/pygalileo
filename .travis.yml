@@ -3,60 +3,68 @@ git:
   depth: 1
 matrix:
   include:
-    - name: Windows Release
-      os: windows
-      env:
-        - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
-      script:
-        - export PATH=$MSBUILD_PATH:$PATH
-        - cd ..
-        - pwd
-        - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
-        - choco source add -n=ros-win -s="https://roswin.azurewebsites.net/api/v2"
-        - choco install python2 -y
-        - choco install boost -y
-        - cd pygalileo
-        - MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
-      before_deploy:
-        - mkdir -p deploy/pygalileo/
-        - cp x64/Release/pyGalileo.pyd deploy/pygalileo/pyGalileo.pyd
-        - cd deploy
-        - tar -czf pyGalileo-win-${TRAVIS_TAG}.tar.gz pyGalileo
-        - cd ..
-        - mv deploy/pyGalileo-win-${TRAVIS_TAG}.tar.gz ./
-
-      deploy:
-        provider: releases
-        api_key: "$token"
-        file: "pyGalileo-win-${TRAVIS_TAG}.tar.gz"
-        skip_cleanup: true
-        on:
-          branch: master
-          tags: true
-    # - name: Linux Build Test
-    #   sudo: required
-    #   dist: xenial
-    #   before_install:
-    #     - export DEBIAN_FRONTEND="noninteractive"
-    #     - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-    #     - sudo apt-get update -y
-    #     - sudo apt-get install -y aria2 wget
-    #     - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
-    #     - sudo chmod +x /usr/local/sbin/apt-fast
-    #     - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
-    #     - sudo apt-fast update -qq
-    #     - sudo apt-get install -y --allow-unauthenticated libjsoncpp-dev ros-kinetic-roscpp
+    # - name: Windows Release
+    #   os: windows
+    #   env:
+    #     - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
     #   script:
-    #     - source /opt/ros/kinetic/setup.bash
-    #     - export LIBRARY_PATH=/opt/ros/kinetic/lib/
-    #     - cd GalileoSDK
-    #     - mkdir build
-    #     - cd build
-    #     - cmake ..
-    #     - make -j
-    #     - sudo make install
-    #     - cd ../../GalileoSDKTest
-    #     - mkdir build
-    #     - cd build
-    #     - cmake ..
-    #     - make -j
+    #     - export PATH=$MSBUILD_PATH:$PATH
+    #     - cd ..
+    #     - pwd
+    #     - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
+    #     - choco source add -n=ros-win -s="https://roswin.azurewebsites.net/api/v2"
+    #     - choco install python2 -y
+    #     - choco install boost -y
+    #     - cd pygalileo
+    #     - MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
+    #   before_deploy:
+    #     - mkdir -p deploy/pygalileo/
+    #     - cp x64/Release/pyGalileo.pyd deploy/pygalileo/pyGalileo.pyd
+    #     - cd deploy
+    #     - tar -czf pyGalileo-win-${TRAVIS_TAG}.tar.gz pyGalileo
+    #     - cd ..
+    #     - mv deploy/pyGalileo-win-${TRAVIS_TAG}.tar.gz ./
+
+    #   deploy:
+    #     provider: releases
+    #     api_key: "$token"
+    #     file: "pyGalileo-win-${TRAVIS_TAG}.tar.gz"
+    #     skip_cleanup: true
+    #     on:
+    #       branch: master
+    #       tags: true
+    - name: Linux Build Test
+      sudo: required
+      dist: xenial
+      before_install:
+        - export DEBIAN_FRONTEND="noninteractive"
+        - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+        - sudo apt-get update -y
+        - sudo apt-get install -y aria2 wget
+        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
+        - sudo chmod +x /usr/local/sbin/apt-fast
+        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
+        - sudo apt-fast update -qq
+        - sudo apt-get install -y --allow-unauthenticated libjsoncpp-dev ros-kinetic-roscpp
+      script:
+        - source /opt/ros/kinetic/setup.bash
+        - export LIBRARY_PATH=/opt/ros/kinetic/lib/
+        # build and install GalileoSDK
+        - cd ..
+        - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
+        - cd GalileoSDK
+        - mkdir build
+        - cd build
+        - cmake ..
+        - make -j
+        - sudo make install
+        - cd ../../GalileoSDKTest
+        - mkdir build
+        - cd build
+        - cmake ..
+        - make -j
+        - cd ../../../pygalileo/pyGalileo
+        - mkdir build
+        - cd build
+        - cmake ..
+        - make

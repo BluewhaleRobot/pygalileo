@@ -1,5 +1,7 @@
-#pragma once
-#include <GalileoSDK.h>
+#ifndef __GALILEO_WRAPPER_H__
+#define __GALILEO_WRAPPER_H__
+
+#include <GalileoSDK/GalileoSDK.h>
 #include <boost/python.hpp>
 
 namespace GalileoWrap {
@@ -108,9 +110,11 @@ namespace GalileoWrap {
         ~GalileoWrap();
         static py_callable ConnectCB;
         static py_callable DisconnectCB;
+        static py_callable UpdateStatusCB;
+        static py_callable GoalReachedCB;
     private:
         GalileoSDK::GalileoSDK* sdk;
     };
 }
 
-
+#endif
