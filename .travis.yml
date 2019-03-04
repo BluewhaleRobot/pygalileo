@@ -33,41 +33,41 @@ matrix:
     #     on:
     #       branch: master
     #       tags: true
-    - name: Ubuntu 18.04 Build Test
-      sudo: required
-      dist: bionic
-      before_install:
-        - export DEBIAN_FRONTEND="noninteractive"
-        - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-        - sudo apt-get update -y
-        - sudo apt-get install -y aria2 wget
-        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
-        - sudo chmod +x /usr/local/sbin/apt-fast
-        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
-        - sudo apt-fast update -qq
-        - sudo apt-get install -y --allow-unauthenticated libjsoncpp-dev ros-melodic-roscpp libboost-all-dev ros-melodic-geometry-msgs
-      script:
-        - source /opt/ros/melodic/setup.bash
-        - export LIBRARY_PATH=/opt/ros/melodic/lib/
-        # build and install GalileoSDK
-        - cd ..
-        - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
-        - cd GalileoSDK/GalileoSDK
-        - mkdir build
-        - cd build
-        - cmake ..
-        - make -j
-        - sudo make install
-        - cd ../../GalileoSDKTest
-        - mkdir build
-        - cd build
-        - cmake ..
-        - make -j
-        - cd ../../../pygalileo/pyGalileo
-        - mkdir build
-        - cd build
-        - cmake ..
-        - make
+    # - name: Ubuntu 18.04 Build Test
+    #   sudo: required
+    #   dist: bionic
+    #   before_install:
+    #     - export DEBIAN_FRONTEND="noninteractive"
+    #     - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+    #     - sudo apt-get update -y
+    #     - sudo apt-get install -y aria2 wget
+    #     - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
+    #     - sudo chmod +x /usr/local/sbin/apt-fast
+    #     - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
+    #     - sudo apt-fast update -qq
+    #     - sudo apt-get install -y --allow-unauthenticated libjsoncpp-dev ros-melodic-roscpp libboost-all-dev ros-melodic-geometry-msgs
+    #   script:
+    #     - source /opt/ros/melodic/setup.bash
+    #     - export LIBRARY_PATH=/opt/ros/melodic/lib/
+    #     # build and install GalileoSDK
+    #     - cd ..
+    #     - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
+    #     - cd GalileoSDK/GalileoSDK
+    #     - mkdir build
+    #     - cd build
+    #     - cmake ..
+    #     - make -j
+    #     - sudo make install
+    #     - cd ../../GalileoSDKTest
+    #     - mkdir build
+    #     - cd build
+    #     - cmake ..
+    #     - make -j
+    #     - cd ../../../pygalileo/pyGalileo
+    #     - mkdir build
+    #     - cd build
+    #     - cmake ..
+    #     - make
     - name: Ubuntu 16.04 Build Test
       sudo: required
       dist: xenial
@@ -85,12 +85,12 @@ matrix:
         # install boost
         - cd ..
         - wget -O boost.tar.gz https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.gz
-        - tar xzvf boost.tar.gz
+        - tar xzf boost.tar.gz
         - cd boost_1_69_0
         - sudo apt-get install build-essential g++ python-dev autotools-dev libicu-dev build-essential libbz2-dev libboost-all-dev
         - ./bootstrap.sh --prefix=/usr/
-        - ./b2 -j8
-        - sudo ./b2 install
+        - travis_wait ./b2 -j8 -d0
+        - travis_wait sudo ./b2 install -d0
         - cd ../pygalileo
         # build and install GalileoSDK
         - source /opt/ros/kinetic/setup.bash
