@@ -1,7 +1,12 @@
 #ifndef __GALILEO_WRAPPER_H__
 #define __GALILEO_WRAPPER_H__
 
+#ifdef _WIN32
+#include "GalileoSDK.h"
+#else
 #include <GalileoSDK/GalileoSDK.h>
+#endif
+
 #include <boost/python.hpp>
 
 namespace GalileoWrap {
@@ -80,10 +85,10 @@ namespace GalileoWrap {
         GalileoSDK::GALILEO_RETURN_CODE ResetGoal();
         GalileoSDK::GALILEO_RETURN_CODE SetSpeed(float vLinear, float vAngle);
         GalileoSDK::GALILEO_RETURN_CODE Shutdown();
-        GalileoSDK::GALILEO_RETURN_CODE SetAngle(uint8_t sign, uint8_t angle);
+        GalileoSDK::GALILEO_RETURN_CODE SetAngle(int sign, int angle);
         GalileoSDK::GALILEO_RETURN_CODE StartLoop();
         GalileoSDK::GALILEO_RETURN_CODE StopLoop();
-        GalileoSDK::GALILEO_RETURN_CODE SetLoopWaitTime(uint8_t time);
+        GalileoSDK::GALILEO_RETURN_CODE SetLoopWaitTime(int time);
         GalileoSDK::GALILEO_RETURN_CODE StartMapping();
         GalileoSDK::GALILEO_RETURN_CODE StopMapping();
         GalileoSDK::GALILEO_RETURN_CODE SaveMap();
@@ -93,8 +98,8 @@ namespace GalileoWrap {
         GalileoSDK::GALILEO_RETURN_CODE SaveChargeBasePosition();
         GalileoSDK::GALILEO_RETURN_CODE StartCharge(float x, float y);
         GalileoSDK::GALILEO_RETURN_CODE StopCharge();
-        GalileoSDK::GALILEO_RETURN_CODE MoveTo(float x, float y, uint8_t &goalNum);
-        GalileoSDK::GALILEO_RETURN_CODE GetGoalNum(uint8_t &goalNum);
+        GalileoSDK::GALILEO_RETURN_CODE MoveTo(float x, float y, int &goalNum);
+        GalileoSDK::GALILEO_RETURN_CODE GetGoalNum(int &goalNum);
         boost::python::object GetCurrentStatus();
         void SetCurrentStatusCallback(boost::python::object callback);
         void SetGoalReachedCallback(boost::python::object callback);

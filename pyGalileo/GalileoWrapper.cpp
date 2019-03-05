@@ -57,7 +57,7 @@ namespace GalileoWrap {
     boost::python::object GalileoWrap::GetCurrentServer() {
         GalileoSDK::ServerInfo* currentServer = sdk->GetCurrentServer();
         if (currentServer == NULL)
-            return boost::python::object();
+            return boost::python::object(NULL);
         else
             return boost::python::object(currentServer);
     }
@@ -111,7 +111,7 @@ namespace GalileoWrap {
         return sdk->Shutdown();
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SetAngle(uint8_t sign, uint8_t angle) {
+    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SetAngle(int sign, int angle) {
         return sdk->SetAngle(sign, angle);
     }
 
@@ -123,7 +123,7 @@ namespace GalileoWrap {
         return sdk->StopLoop();
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SetLoopWaitTime(uint8_t time) {
+    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SetLoopWaitTime(int time) {
         return sdk->SetLoopWaitTime(time);
     }
 
@@ -163,12 +163,18 @@ namespace GalileoWrap {
         return sdk->StopCharge();
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::MoveTo(float x, float y, uint8_t &goalNum) {
-        return sdk->MoveTo(x, y, &goalNum);
+    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::MoveTo(float x, float y, int &goalNum) {
+        uint8_t goalNumByte = 0;
+        auto res = sdk->MoveTo(x, y, &goalNumByte);
+        goalNum = goalNumByte;
+        return res;
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::GetGoalNum(uint8_t &goalNum) {
-        return sdk->GetGoalNum(&goalNum);
+    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::GetGoalNum(int &goalNum) {
+        uint8_t goalNumByte = 0;
+        auto res = sdk->GetGoalNum(&goalNumByte);
+        goalNum = goalNumByte;
+        return res;
     }
 
     boost::python::object GalileoWrap::GetCurrentStatus() {
@@ -177,7 +183,7 @@ namespace GalileoWrap {
             return boost::python::object(status);
         }
         else
-            return boost::python::object();
+            return boost::python::object(NULL);
     }
 
     void GalileoWrap::SetCurrentStatusCallback(boost::python::object callback) {

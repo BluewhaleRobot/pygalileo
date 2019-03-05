@@ -1,5 +1,9 @@
 #define BOOST_PYTHON_STATIC_LIB
+#ifdef _WIN32
+#include "GalileoSDK.h"
+#else
 #include <GalileoSDK/GalileoSDK.h>
+#endif
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "GalileoWrapper.h"
