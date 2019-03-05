@@ -163,18 +163,16 @@ namespace GalileoWrap {
         return sdk->StopCharge();
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::MoveTo(float x, float y, int &goalNum) {
-        uint8_t goalNumByte = 0;
+    int GalileoWrap::MoveTo(float x, float y) {
+        uint8_t goalNumByte = -1;
         auto res = sdk->MoveTo(x, y, &goalNumByte);
-        goalNum = goalNumByte;
-        return res;
+        return goalNumByte;
     }
 
-    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::GetGoalNum(int &goalNum) {
-        uint8_t goalNumByte = 0;
+    int GalileoWrap::GetGoalNum() {
+        uint8_t goalNumByte = -1;
         auto res = sdk->GetGoalNum(&goalNumByte);
-        goalNum = goalNumByte;
-        return res;
+        return goalNumByte;
     }
 
     boost::python::object GalileoWrap::GetCurrentStatus() {

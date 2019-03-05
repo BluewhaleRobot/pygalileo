@@ -98,8 +98,8 @@ namespace GalileoWrap {
         GalileoSDK::GALILEO_RETURN_CODE SaveChargeBasePosition();
         GalileoSDK::GALILEO_RETURN_CODE StartCharge(float x, float y);
         GalileoSDK::GALILEO_RETURN_CODE StopCharge();
-        GalileoSDK::GALILEO_RETURN_CODE MoveTo(float x, float y, int &goalNum);
-        GalileoSDK::GALILEO_RETURN_CODE GetGoalNum(int &goalNum);
+        int MoveTo(float x, float y);
+        int GetGoalNum();
         boost::python::object GetCurrentStatus();
         void SetCurrentStatusCallback(boost::python::object callback);
         void SetGoalReachedCallback(boost::python::object callback);
