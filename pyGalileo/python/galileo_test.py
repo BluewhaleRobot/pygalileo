@@ -352,5 +352,15 @@ def test_goal_reached_cb():
     time.sleep(10)
 
 
+def testAudioIOT():
+    sdk = pygalileo.SDK()
+    if sdk.ConnectIOT(
+            "71329A5B0F2D68364BB7B44F3F125531E4C7F5BC3BCE2694DFE39B505FF9C730A614FF2790C1", 10000, "xiaoqiang", None, None) != pygalileo.GALILEO_RETURN_CODE.OK:
+        print("Connect failed")
+    while True:
+        sdk.SendAudio("测试")
+        time.sleep(4)
+
+
 if __name__ == "__main__":
-    test_goal_reached_cb()
+    testAudioIOT()

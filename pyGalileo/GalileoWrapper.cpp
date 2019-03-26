@@ -50,6 +50,40 @@ namespace GalileoWrap {
         return sdk->Connect(targetID, auto_connect, timeout, OnConnectTmp, OnDisconnectTmp);
     }
 
+    GalileoSDK::GALILEO_RETURN_CODE
+        GalileoWrap::ConnectIOT(std::string targetID, int timeout, std::string password,
+            boost::python::object OnConnect,
+            boost::python::object OnDisconnect
+        ) {
+        ConnectCB = py_callable{ OnConnect };
+        DisconnectCB = py_callable{ OnDisconnect };
+        void(*OnConnectTmp)(GalileoSDK::GALILEO_RETURN_CODE, std::string id);
+        void(*OnDisconnectTmp)(GalileoSDK::GALILEO_RETURN_CODE, std::string id);
+        OnConnectTmp = NULL;
+        OnDisconnectTmp = NULL;
+        if (PyCallable_Check(OnConnect.ptr())) {
+            OnConnectTmp = [](GalileoSDK::GALILEO_RETURN_CODE status, std::string id) {
+                ConnectCB(status, id);
+            };
+        }
+        else if (Py_None != OnConnect.ptr()) {
+            PyErr_SetString(PyExc_TypeError, "OnConnect expected type function or None");
+            boost::python::throw_error_already_set();
+            return GalileoSDK::GALILEO_RETURN_CODE::INVALIDE_PARAMS;
+        }
+        if (PyCallable_Check(OnDisconnect.ptr())) {
+            OnDisconnectTmp = [](GalileoSDK::GALILEO_RETURN_CODE status, std::string id) {
+                DisconnectCB(status, id);
+            };
+        }
+        else if (Py_None != OnDisconnect.ptr()) {
+            PyErr_SetString(PyExc_TypeError, "OnDisconnect expected type function or None");
+            boost::python::throw_error_already_set();
+            return GalileoSDK::GALILEO_RETURN_CODE::INVALIDE_PARAMS;
+        }
+        return sdk->Connect(targetID, timeout, password, OnConnectTmp, OnDisconnectTmp);
+    }
+
     ServersList GalileoWrap::GetServersOnline() {
         return sdk->GetServersOnline();
     }
@@ -200,5 +234,13 @@ namespace GalileoWrap {
 
     GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::WaitForGoal(int goalID) {
         return sdk->WaitForGoal(goalID);
+    }
+
+    GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SendAudio(std::string audio) {
+        return sdk->SendAudio((char*)audio.c_str());
+    }
+
+    bool GalileoWrap::CheckServerOnline(std::string targetID) {
+        return sdk->CheckServerOnline(targetID);
     }
 }

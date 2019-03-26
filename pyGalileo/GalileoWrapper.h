@@ -1,13 +1,13 @@
 #ifndef __GALILEO_WRAPPER_H__
 #define __GALILEO_WRAPPER_H__
 
+#include <boost/python.hpp>
+
 #ifdef _WIN32
 #include "GalileoSDK.h"
 #else
 #include <GalileoSDK/GalileoSDK.h>
 #endif
-
-#include <boost/python.hpp>
 
 namespace GalileoWrap {
     
@@ -71,6 +71,11 @@ namespace GalileoWrap {
                 boost::python::object OnConnect,
                 boost::python::object OnDisconnect
             );
+        GalileoSDK::GALILEO_RETURN_CODE
+            ConnectIOT(std::string targetID, int timeout, std::string password,
+                boost::python::object OnConnect,
+                boost::python::object OnDisconnect
+            );
         ServersList GetServersOnline();
         boost::python::object GetCurrentServer();
         GalileoSDK::GALILEO_RETURN_CODE PublishTest();
@@ -104,6 +109,8 @@ namespace GalileoWrap {
         void SetCurrentStatusCallback(boost::python::object callback);
         void SetGoalReachedCallback(boost::python::object callback);
         GalileoSDK::GALILEO_RETURN_CODE WaitForGoal(int goalID);
+        GalileoSDK::GALILEO_RETURN_CODE SendAudio(std::string audio);
+        bool CheckServerOnline(std::string targetID);
         ~GalileoWrap();
     private:
         GalileoSDK::GalileoSDK* sdk;

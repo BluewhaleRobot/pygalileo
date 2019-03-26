@@ -1,11 +1,11 @@
 #define BOOST_PYTHON_STATIC_LIB
+#include <boost/python.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #ifdef _WIN32
 #include "GalileoSDK.h"
 #else
 #include <GalileoSDK/GalileoSDK.h>
 #endif
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include "GalileoWrapper.h"
 
 class World
@@ -33,6 +33,9 @@ BOOST_PYTHON_MODULE(pygalileo)
     class_<GalileoWrap::GalileoWrap>("SDK", init<>())
         .def("Connect", &GalileoWrap::GalileoWrap::Connect,
         (boost::python::arg("targetID"), boost::python::arg("auto_connect"), boost::python::arg("timeout"),
+            boost::python::arg("OnConnect") = NULL, boost::python::arg("OnDisconnect") = NULL))
+        .def("ConnectIOT", &GalileoWrap::GalileoWrap::ConnectIOT,
+        (boost::python::arg("targetID"), boost::python::arg("timeout"), boost::python::arg("password"),
             boost::python::arg("OnConnect") = NULL, boost::python::arg("OnDisconnect") = NULL))
         .def("GetServersOnline", &GalileoWrap::GalileoWrap::GetServersOnline)
         .def("GetCurrentServer", &GalileoWrap::GalileoWrap::GetCurrentServer)
@@ -68,6 +71,8 @@ BOOST_PYTHON_MODULE(pygalileo)
         .def("SetCurrentStatusCallback", &GalileoWrap::GalileoWrap::SetCurrentStatusCallback)
         .def("SetGoalReachedCallback", &GalileoWrap::GalileoWrap::SetGoalReachedCallback)
         .def("WaitForGoal", &GalileoWrap::GalileoWrap::WaitForGoal)
+        .def("SendAudio", &GalileoWrap::GalileoWrap::SendAudio)
+        .def("CheckServerOnline", &GalileoWrap::GalileoWrap::CheckServerOnline)
         ;
     class_<GalileoSDK::ServerInfo>("ServerInfo")
         .add_property("mac", &GalileoSDK::ServerInfo::getMac, &GalileoSDK::ServerInfo::setMac)
