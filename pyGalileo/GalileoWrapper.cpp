@@ -13,6 +13,13 @@ namespace GalileoWrap {
         free(sdk);
     }
 
+	void GalileoWrap::Dispose()
+	{
+		sdk->Dispose();
+	}
+
+	
+
     py_callable ConnectCB = py_callable(boost::python::object());
     py_callable DisconnectCB = py_callable(boost::python::object());
     py_callable UpdateStatusCB = py_callable(boost::python::object());

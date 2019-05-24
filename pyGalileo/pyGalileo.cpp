@@ -37,6 +37,7 @@ BOOST_PYTHON_MODULE(pygalileo)
 		.def("ConnectIOT", &GalileoWrap::GalileoWrap::ConnectIOT,
 		(boost::python::arg("targetID"), boost::python::arg("timeout"), boost::python::arg("password"),
 			boost::python::arg("OnConnect") = NULL, boost::python::arg("OnDisconnect") = NULL))
+		.def("Dispose", &GalileoWrap::GalileoWrap::Dispose)
 		.def("GetServersOnline", &GalileoWrap::GalileoWrap::GetServersOnline)
 		.def("GetCurrentServer", &GalileoWrap::GalileoWrap::GetCurrentServer)
 		.def("PublishTest", &GalileoWrap::GalileoWrap::PublishTest)

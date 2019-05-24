@@ -12,10 +12,10 @@ matrix:
         - cd ..
         - pwd
         - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
-        - choco install python2 -y
+        - travis_wait choco install python2 -y
         - cd pygalileo
         # travis build failed but can build successful locally
-        - MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
+        - travis_wait MSBuild.exe pyGalileo.sln //p:configuration=release //p:platform=x64
       before_deploy:
         - mkdir -p deploy/pygalileo/
         - cp x64/Release/pygalileo.pyd deploy/pygalileo/pygalileo.pyd
@@ -70,30 +70,43 @@ matrix:
     - name: Ubuntu 16.04 Build Test
       sudo: required
       dist: xenial
+      addons:
+        apt:
+          update: true
+          sources:
+            - sourceline: 'ppa:mhier/libboost-latest'
+          packages:
+            - boost1.68-dev
       before_install:
         - export DEBIAN_FRONTEND="noninteractive"
         - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
         - sudo apt-get update -y
-        - sudo apt-get install -y aria2 wget
-        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
-        - sudo chmod +x /usr/local/sbin/apt-fast
-        - sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
-        - sudo apt-fast update -qq
-        - sudo apt-get install -y --allow-unauthenticated libjsoncpp-dev ros-kinetic-roscpp libboost-all-dev ros-kinetic-geometry-msgs
       script:
-        # install boost
         - cd ..
-        - wget -O boost.tar.gz https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.gz
-        - tar xzf boost.tar.gz
-        - cd boost_1_69_0
-        - sudo apt-get install build-essential g++ python-dev autotools-dev libicu-dev build-essential libbz2-dev libboost-all-dev
-        - ./bootstrap.sh --prefix=/usr/
-        - travis_wait ./b2 -j8 -d0
-        - travis_wait sudo ./b2 install -d0
+        # install ros packages
+        - mkdir -p amd64/src
+        - cd amd64/src
+        - git clone https://github.com/ros/catkin --depth=1
+        - git clone https://github.com/ros/common_msgs --depth=1
+        - git clone https://github.com/ros/gencpp --depth=1
+        - git clone https://github.com/jsk-ros-pkg/geneus --depth=1
+        - git clone https://github.com/ros/genlisp --depth=1
+        - git clone https://github.com/ros/genmsg --depth=1
+        - git clone https://github.com/RethinkRobotics-opensource/gennodejs --depth=1
+        - git clone https://github.com/ros/genpy --depth=1
+        - git clone https://github.com/ros/message_generation --depth=1
+        - git clone https://github.com/ros/message_runtime --depth=1
+        - git clone https://github.com/BluewhaleRobot/ros_comm --depth=1
+        - git clone https://github.com/ros/ros_comm_msgs --depth=1
+        - git clone https://github.com/BluewhaleRobot/rosconsole --depth=1
+        - git clone https://github.com/BluewhaleRobot/roscpp_core --depth=1
+        - git clone https://github.com/ros/std_msgs --depth=1
+        - travis_wait 20 sudo apt-get install -yqq --allow-unauthenticated python-empy python-catkin-pkg python-catkin-tools > /dev/null
+        - cd ..
+        - ./src/catkin/bin/catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DBUILD_SHARED_LIBS=OFF -DCATKIN_ENABLE_TESTING=OFF | awk "(NR%50)==0{print;}"
+        - source ./devel/setup.bash
         - cd ../pygalileo
         # build and install GalileoSDK
-        - source /opt/ros/kinetic/setup.bash
-        - export LIBRARY_PATH=/opt/ros/kinetic/lib/
         - cd ..
         - git clone https://github.com/bluewhalerobot/GalileoSDK --depth=1
         - cd GalileoSDK/IotWrapper
