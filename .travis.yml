@@ -77,7 +77,6 @@ matrix:
             - sourceline: 'ppa:mhier/libboost-latest'
           packages:
             - boost1.68-dev
-            - libboost-python-dev
       before_install:
         - export DEBIAN_FRONTEND="noninteractive"
         - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -131,8 +130,9 @@ matrix:
         - cd build
         - cmake ..
         - make -j
-        - cd ../../../pygalileo/pyGalileo
-        - mkdir build
-        - cd build
-        - cmake ..
-        - make
+        # 缺少boost-python
+        # - cd ../../../pygalileo/pyGalileo
+        # - mkdir build
+        # - cd build
+        # - cmake ..
+        # - make
