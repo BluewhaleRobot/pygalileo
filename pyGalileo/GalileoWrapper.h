@@ -110,6 +110,8 @@ namespace GalileoWrap {
         void SetGoalReachedCallback(boost::python::object callback);
         GalileoSDK::GALILEO_RETURN_CODE WaitForGoal(int goalID);
         GalileoSDK::GALILEO_RETURN_CODE SendAudio(std::string audio);
+		GalileoSDK::GALILEO_RETURN_CODE SendAudioRaw(boost::python::list audio);
+		GalileoSDK::GALILEO_RETURN_CODE EnableGreeting(bool flag);
         bool CheckServerOnline(std::string targetID);
         ~GalileoWrap();
     private:

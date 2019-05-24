@@ -240,6 +240,15 @@ namespace GalileoWrap {
         return sdk->SendAudio((char*)audio.c_str());
     }
 
+	GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::SendAudioRaw(boost::python::list audio) {
+		std::vector<uint8_t> audio_vec = to_std_vector<uint8_t>(audio);
+		return sdk->SendCMD(audio_vec.data(), audio_vec.size());
+	}
+
+	GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::EnableGreeting(bool flag) {
+		return sdk->EnableGreeting(flag);
+	}
+
     bool GalileoWrap::CheckServerOnline(std::string targetID) {
         return sdk->CheckServerOnline(targetID);
     }
