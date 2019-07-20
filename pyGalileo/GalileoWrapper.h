@@ -76,6 +76,9 @@ namespace GalileoWrap {
                 boost::python::object OnConnect,
                 boost::python::object OnDisconnect
             );
+		GalileoSDK::GALILEO_RETURN_CODE
+			KeepConnection(bool flag, int maxRetry);
+		int GetRetryCount();
 		void Dispose();
         ServersList GetServersOnline();
         boost::python::object GetCurrentServer();

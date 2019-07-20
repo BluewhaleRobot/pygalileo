@@ -16,6 +16,15 @@ def test_pub():
         time.sleep(1)
 
 
+def test_connect():
+    sdk = pygalileo.SDK()
+    res = sdk.Connect("", True, 10000, None, None)
+    if res == pygalileo.GALILEO_RETURN_CODE.OK:
+        print("Connect to server: " + sdk.GetCurrentServer().id)
+    else:
+        print("Connect to server failed")
+
+
 def test_get_servers_online():
     sdk = pygalileo.SDK()
     while True:
@@ -24,7 +33,7 @@ def test_get_servers_online():
             print("No Server Found")
         for server in servers:
             print(server.id)
-            sdk.Connect("", True, 10000, None, None)
+            # sdk.Connect("", True, 10000, None, None)
         time.sleep(1)
 
 
@@ -362,5 +371,28 @@ def testAudioIOT():
         time.sleep(4)
 
 
+def testKeepConnection():
+    print("start test")
+    sdk = pygalileo.SDK()
+
+    def on_connect(status, id):
+        print(str(status) + " " + id)
+
+    def on_disconnect(status, id):
+        print(str(status) + " " + id)
+
+    res = sdk.Connect(
+        "8FB56D27D6C961E9036F62182ADE9544D71E23C31E5DF4C7DD692B9E4296A131434B1066D365", True, 3000, on_connect, on_disconnect)
+    sdk.KeepConnection(True)
+    print(str(res))
+    while True:
+        time.sleep(1)
+        status = sdk.GetCurrentStatus()
+        if status == 0:
+            print("Get status failed")
+        else:
+            print("Power: " + str(status.power))
+
+
 if __name__ == "__main__":
-    testAudioIOT()
+    testKeepConnection()

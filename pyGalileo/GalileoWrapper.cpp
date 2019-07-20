@@ -91,6 +91,15 @@ namespace GalileoWrap {
         return sdk->Connect(targetID, timeout, password, OnConnectTmp, OnDisconnectTmp);
     }
 
+	GalileoSDK::GALILEO_RETURN_CODE GalileoWrap::KeepConnection(bool flag, int maxRetry) {
+		return sdk->KeepConnection(flag, maxRetry);
+	}
+
+	int GalileoWrap::GetRetryCount() {
+		return sdk->GetRetryCount();
+	}
+
+
     ServersList GalileoWrap::GetServersOnline() {
         return sdk->GetServersOnline();
     }
